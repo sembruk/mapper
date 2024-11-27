@@ -1,5 +1,5 @@
 /*
- *    Copyright 2021 Kai Pastor
+ *    Copyright 2024 Kai Pastor
  *
  *    This file is part of OpenOrienteering.
  *
@@ -17,56 +17,44 @@
  *    along with OpenOrienteering.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
-#ifndef OPENORIENTEERING_SIMPLE_COURSE_DIALOG_H
-#define OPENORIENTEERING_SIMPLE_COURSE_DIALOG_H
+#ifndef OPENORIENTEERING_SYMBOL_REPORT_FEATURE_H
+#define OPENORIENTEERING_SYMBOL_REPORT_FEATURE_H
 
 #include <QtGlobal>
-#include <QDialog>
 #include <QObject>
-#include <QString>
+// IWYU pragma: no_include <QString>
 
-class QDialogButtonBox;
-class QLineEdit;
-class QSpinBox;
-class QWidget;
+class QAction;
 
 namespace OpenOrienteering {
 
-class SimpleCourseExport;
-
+class MapEditorController;
 
 /**
- * A dialog to provide extra information for simple course export.
+ * Provides a UI feature for generating symbol set reports.
  */
-class SimpleCourseDialog : public QDialog
+class SymbolReportFeature : public QObject
 {
-Q_OBJECT
+	Q_OBJECT
+	
 public:
-	~SimpleCourseDialog() override;
+	SymbolReportFeature(MapEditorController& controller);
 	
-	SimpleCourseDialog(const SimpleCourseExport& simple_course, QWidget* parent);
+	~SymbolReportFeature() override;
 	
-	QString eventName() const;
+	void setEnabled(bool enabled);
 	
-	QString courseName() const;
-	
-	int firstCodeNumber() const;
-	
-protected:
-	void updateWidgets();
+	QAction* showDialogAction() { return show_action; }
 	
 private:
-	const SimpleCourseExport& simple_course;
-	QLineEdit* event_name_edit;
-	QLineEdit* course_name_edit;
-	QSpinBox*  first_code_spinbox;
-	QDialogButtonBox* button_box;
+	void showDialog();
 	
-	Q_DISABLE_COPY(SimpleCourseDialog)
+	MapEditorController& controller;
+	QAction* show_action;
+	
+	Q_DISABLE_COPY(SymbolReportFeature)
 };
-
-
+	
 }  // namespace OpenOrienteering
 
-#endif  // OPENORIENTEERING_SIMPLE_COURSE_DIALOG_H
+#endif  // OPENORIENTEERING_SYMBOL_REPORT_FEATURE_H

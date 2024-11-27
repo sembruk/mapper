@@ -71,6 +71,7 @@ class PaintOnTemplateFeature;
 class PrintWidget;
 class ReopenTemplateDialog;
 class Symbol;
+class SymbolReportFeature;
 class SymbolWidget;
 class Template;
 class TemplateListWidget;
@@ -264,9 +265,9 @@ public:
 	
 public slots:
 	/**
-	 * Lets the user export a PathObject as a simple course.
+	 * Lets the user export a course from the current map.
 	 */
-	void exportSimpleCourse();
+	void exportCourse();
 	
 	/**
 	 * Lets the user export the map as geospatial vector data.
@@ -701,7 +702,7 @@ private:
 	QAction* print_act = {};
 	QAction* export_image_act = {};
 	QAction* export_kmz_act = {};
-	QAction* export_simple_course_act = {};
+	QAction* export_course_act = {};
 	QAction* export_pdf_act = {};
 	QAction* export_vector_act = {};
 	
@@ -746,6 +747,8 @@ private:
 	QAction* rotate_map_act = {};
 	QAction* map_notes_act = {};
 	QAction* symbol_set_id_act = {};
+	std::unique_ptr<SymbolReportFeature> symbol_report_feature;
+	
 	
 	QAction* color_window_act = {};
 	QPointer<EditorDockWidget> color_dock_widget;

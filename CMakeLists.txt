@@ -65,11 +65,6 @@ if(NOT CMAKE_BUILD_TYPE)
 	  FORCE)
 endif(NOT CMAKE_BUILD_TYPE)
 
-if(APPLE)
-	SET(Mapper_MACOSX_VERSION "10.7" CACHE STRING
-	  "Minimum Mac OS X version to build for, recommended: 10.7")
-endif()
-
 option(Mapper_DEBUG_TRANSLATIONS "Debug missing translations" OFF)
 
 # To improve developer experience, build clipper if it is not found
@@ -169,12 +164,6 @@ include(CTest)
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED TRUE)
 
-if(APPLE AND Mapper_MACOSX_VERSION)
-	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -stdlib=libc++ -mmacosx-version-min=${Mapper_MACOSX_VERSION}")
-	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -mmacosx-version-min=${Mapper_MACOSX_VERSION}")
-	set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -mmacosx-version-min=${Mapper_MACOSX_VERSION}")
-endif()
-
 if(CMAKE_COMPILER_IS_GNUCXX)
 	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wpedantic -Wextra")
 	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c99 -Wall -Wpedantic")
@@ -267,21 +256,25 @@ endif()
 
 # Build-time code checks
 
-if(NOT CMAKE_CXX_CLANG_TIDY)
+if(NOT CMAKE_HOST_WIN32)
+	find_program(SH_EXECUTABLE NAMES sh PATHS ENV PATH NO_DEFAULT_PATH)
+endif()
+
+if(NOT CMAKE_CXX_CLANG_TIDY AND Mapper_DEVELOPMENT_BUILD AND SH_EXECUTABLE)
 	set(min_version 8)
 	find_package(ClangTidy ${min_version})
 	if(ClangTidy_FOUND)
-		set(CMAKE_CXX_CLANG_TIDY "${PROJECT_SOURCE_DIR}/code-check-wrapper.sh;${ClangTidy_EXECUTABLE}")
+		set(CMAKE_CXX_CLANG_TIDY "${SH_EXECUTABLE};-e;${PROJECT_SOURCE_DIR}/code-check-wrapper.sh;${ClangTidy_EXECUTABLE}")
 	else()
 		message(AUTHOR_WARNING "Install clang-tidy >= ${min_version} for code checks during build")
 	endif()
 endif()
 
-if(NOT CMAKE_CXX_INCLUDE_WHAT_YOU_USE)
+if(NOT CMAKE_CXX_INCLUDE_WHAT_YOU_USE AND Mapper_DEVELOPMENT_BUILD AND SH_EXECUTABLE)
 	set(min_version 0.12)
 	find_package(IWYU ${min_version})
 	if(IWYU_FOUND)
-		set(CMAKE_CXX_INCLUDE_WHAT_YOU_USE "${PROJECT_SOURCE_DIR}/code-check-wrapper.sh;${IWYU_EXECUTABLE}")
+		set(CMAKE_CXX_INCLUDE_WHAT_YOU_USE "${SH_EXECUTABLE};-e;${PROJECT_SOURCE_DIR}/code-check-wrapper.sh;${IWYU_EXECUTABLE}")
 	else()
 		message(AUTHOR_WARNING "Install include-what-you-use >= ${min_version} for code checks during build")
 	endif()

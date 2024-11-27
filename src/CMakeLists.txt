@@ -114,6 +114,7 @@ set(Mapper_Common_SRCS
   
   core/symbols/area_symbol.cpp
   core/symbols/combined_symbol.cpp
+  core/symbols/html_symbol_report.cpp
   core/symbols/line_symbol.cpp
   core/symbols/point_symbol.cpp
   core/symbols/symbol.cpp
@@ -133,7 +134,7 @@ set(Mapper_Common_SRCS
   fileformats/ocd_icon.cpp
   fileformats/ocd_parameter_stream_reader.cpp
   fileformats/ocd_types.cpp
-  fileformats/simple_course_export.cpp
+  fileformats/course_export.cpp
   fileformats/xml_file_format.cpp
   
   gui/about_dialog.cpp
@@ -151,7 +152,7 @@ set(Mapper_Common_SRCS
   gui/print_widget.cpp
   gui/select_crs_dialog.cpp
   gui/settings_dialog.cpp
-  gui/simple_course_dialog.cpp
+  gui/course_dialog.cpp
   gui/task_dialog.cpp
   gui/text_browser_dialog.cpp
   gui/touch_cursor.cpp
@@ -175,6 +176,7 @@ set(Mapper_Common_SRCS
   gui/symbols/symbol_properties_widget.cpp
   gui/symbols/symbol_replacement.cpp
   gui/symbols/symbol_replacement_dialog.cpp
+  gui/symbols/symbol_report_feature.cpp
   gui/symbols/symbol_setting_dialog.cpp
   gui/symbols/text_symbol_settings.cpp
   
